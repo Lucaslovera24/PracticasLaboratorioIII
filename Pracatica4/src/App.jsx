@@ -1,24 +1,24 @@
 import { useState } from "react";
-import Newhomework from "./newhomework";
-import Listhomework from "./listhomework";
+import Newhomework from "./components/NewHomework/newhomework";
+import Listhomework from "./components/ListHomework/listhomework";
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
 
   const addTask = (title) => {
-    const newTask = { title: title, completed: false };
+    const newTask = { title: title, completed: false, id: Math.random() };
     setTasks([...tasks, newTask]);
   };
 
-  const toggleTask = (index) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].completed = !updatedTasks[index].completed;
+  const toggleTask = (id) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, completed: !task.completed } : task
+    );
     setTasks(updatedTasks);
   };
 
-  const deleteTask = (index) => {
-    const updatedTasks = [...tasks];
-    updatedTasks.splice(index, 1);
+  const deleteTask = (id) => {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
   };
 
@@ -28,8 +28,8 @@ const App = () => {
       <Newhomework addTask={addTask} />
       <Listhomework
         tasks={tasks}
-        toggleTask={toggleTask}
-        deleteTask={deleteTask}
+        toggleTask={(id) => toggleTask(id)}
+        deleteTask={(id) => deleteTask(id)}
       />
     </div>
   );
